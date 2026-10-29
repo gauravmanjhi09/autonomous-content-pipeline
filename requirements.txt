@@ -1,0 +1,7 @@
+crewai
+langgraph
+langchain-groq
+python-dotenv
+duckduckgo-search
+pydantic
+litellm
