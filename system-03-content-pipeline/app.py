@@ -1,15 +1,46 @@
+import os
+import re
 import time
 from pathlib import Path
 
-import re
-
 import pandas as pd
 import streamlit as st
+
+# Streamlit Cloud: copy secrets into environment variables before graph.py reads them
+try:
+    for _k in ("GROQ_API_KEY", "GROQ_MODEL"):
+        if _k in st.secrets:
+            os.environ[_k] = str(st.secrets[_k])
+except Exception:
+    pass  # running locally, the .env file is used instead
 
 import graph as pipeline
 from graph import build_app, ungrounded_numbers
 
 st.set_page_config(page_title="Content Pipeline", page_icon="✍️", layout="wide")
+
+def check_password() -> bool:
+    try:
+        expected = st.secrets["APP_PASSWORD"]
+    except Exception:
+        return True  # no password configured (local use)
+    if st.session_state.get("authed"):
+        return True
+    st.title("✍️ Autonomous Content Pipeline")
+    st.info("This demo runs on a limited free API quota, so it is password protected. "
+            "Contact the author for access, or see the README for sample results.")
+    pw = st.text_input("Password", type="password")
+    if pw:
+        if pw == expected:
+            st.session_state["authed"] = True
+            st.rerun()
+        else:
+            st.error("Wrong password.")
+    return False
+
+
+if not check_password():
+    st.stop()
 
 EXAMPLES = [
     "Why RAG systems need evaluation",
@@ -25,8 +56,6 @@ if "history" not in st.session_state:
 def set_topic(t: str):
     st.session_state["topic"] = t
 
-
-# ---------------- sidebar ----------------
 with st.sidebar:
     st.header("⚙️ Settings")
     threshold = st.slider("Quality threshold", 0.5, 0.95, 0.8, 0.05,
@@ -40,8 +69,6 @@ with st.sidebar:
     for t in EXAMPLES:
         st.button(t, on_click=set_topic, args=(t,))
 
-
-# ---------------- pipeline run ----------------
 def run_pipeline(topic: str, fmt: str):
     pipeline.THRESHOLD = threshold
     pipeline.MAX_LOOPS = max_loops
@@ -90,8 +117,6 @@ def run_pipeline(topic: str, fmt: str):
         "Seconds": round(elapsed),
     })
 
-
-# ---------------- result display ----------------
 def show_result():
     r = st.session_state.get("result")
     if not r:
@@ -130,27 +155,6 @@ def show_result():
         st.warning(f"Fact-check: not found in any of the {n_src} fetched pages: {unv}")
     else:
         st.success(f"Fact-check: every percentage was found in the {n_src} of {n_urls} fetched pages.")
-
-    # unv = s.get("unverified", [])
-    # n_src = len(s.get("sources", {}))
-    # has_pct = re.search(r"\d+(?:\.\d+)?\s?(?:%|percent)", s["draft"])
-    # if n_src == 0:
-    #     st.info("Fact-check skipped: no source pages could be fetched.")
-    # elif not has_pct:
-    #     st.info("Fact-check: the post contains no percentages, so there was nothing to check.")
-    # elif unv:
-    #     st.warning(f"Fact-check: not found in any of the {n_src} fetched source pages: {unv}")
-    # else:
-    #     st.success(f"Fact-check: every percentage was found in the {n_src} fetched source pages.")
-
-    # unv = s.get("unverified", [])
-    # n_src = len(s.get("sources", {}))
-    # if n_src == 0:
-    #     st.info("Fact-check skipped: no source pages could be fetched.")
-    # elif unv:
-    #     st.warning(f"Fact-check: not found in any of the {n_src} fetched source pages: {unv}")
-    # else:
-    #     st.success(f"Fact-check: every percentage was found in the {n_src} fetched source pages.")
 
     st.info("The critic checks the post against the research notes, and the fact-check "
             "only covers percentages. Verify any statistic or paper before publishing.")
@@ -199,8 +203,6 @@ def show_result():
         st.download_button("⬇️ Download research brief", s["research"],
                            file_name="research_brief.md")
 
-
-# ---------------- page ----------------
 st.title("✍️ Autonomous Content Pipeline")
 st.caption("CrewAI research crew → LangGraph draft ↔ critique loop → fact-check → publish")
 
