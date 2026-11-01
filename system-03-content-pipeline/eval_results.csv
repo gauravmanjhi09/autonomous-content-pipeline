@@ -1,0 +1,11 @@
+topic,format,loops,first_score,final_score,flagged,words,sources_fetched,sources_total,has_percentages,unverified_count,seconds
+Why RAG systems need evaluation,blog,3,0.633,0.867,False,466,4,5,False,0,126
+How vector databases speed up semantic search,blog,2,0.6,0.833,False,396,5,5,False,0,62
+Guardrails for production LLM agents,blog,3,0.667,0.75,True,613,5,5,False,0,181
+Prompt caching and why it cuts LLM costs,blog,3,0.467,0.733,True,556,5,5,True,0,168
+Why LLM agents need structured outputs,blog,3,0.667,0.7,True,541,5,5,False,0,164
+Chunking strategies for RAG pipelines,blog,3,0.667,0.7,True,523,5,5,False,0,199
+Monitoring LLM applications in production,blog,3,0.6,1.0,False,496,3,5,False,0,135
+Fine-tuning vs retrieval: when to use which,blog,1,0.83,0.83,False,529,5,6,False,0,72
+How embeddings represent meaning,blog,2,0.68,0.97,False,531,4,5,False,0,110
+Reducing hallucinations in LLM apps,blog,3,0.67,0.73,True,568,5,5,True,6,153

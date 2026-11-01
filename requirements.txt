@@ -2,6 +2,9 @@ crewai
 langgraph
 langchain-groq
 python-dotenv
-duckduckgo-search
+ddgs
 pydantic
+requests
+streamlit
+pandas
 litellm

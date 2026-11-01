@@ -1,12 +1,3 @@
-# from graph import build_app
-
-# app = build_app()
-
-# if __name__ == "__main__":
-#     final = app.invoke({"topic": "Why agentic AI needs typed tool calls"})
-#     print(f"\nPublished: {final['output_path']}")
-#     print(f"Loops: {final['loops']} | Score: {final['score']:.2f} | Flagged: {final['flagged']}")
-
 import argparse
 from graph import build_app
 

@@ -8,19 +8,11 @@ import os
 load_dotenv()
 
 llm = LLM(
-    model="openai/openai/gpt-oss-120b",
+    model=f"openai/{os.getenv('GROQ_MODEL', 'openai/gpt-oss-120b')}",
     base_url="https://api.groq.com/openai/v1",
     api_key=os.getenv("GROQ_API_KEY"),
     temperature=0.3,
 )
-
-# @tool("web_search")
-# def web_search(query: str) -> str:
-#     """Search the web. Input: a search query string, e.g. 'agentic AI trends 2026'.
-#     Returns title, URL and snippet for the top results."""
-#     with DDGS() as ddgs:
-#         results = ddgs.text(query, max_results=6)
-#     return "\n\n".join(f"{r['title']}\n{r['href']}\n{r['body']}" for r in results)
 
 @tool("web_search")
 def web_search(query: str) -> str:
