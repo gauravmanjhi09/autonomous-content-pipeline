@@ -1,6 +1,7 @@
 # autonomous-content-pipeline
 
 A multi-agent system that turns a topic into a researched, reviewed post. A **CrewAI** research crew gathers sources, then a **LangGraph** loop drafts, critiques and revises the post until it passes a quality gate (or hits a hard loop cap). It can write a blog post, a LinkedIn post or a Twitter/X thread.
+App link:https://autonomous-content-pipeline.streamlit.app/
 
 ![Streamlit app screenshot](docs/app-screenshot.png)
 
